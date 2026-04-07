@@ -1,6 +1,12 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse
 from db import get_conn
+from models.schemas import (
+    HealthResponse, ImportResult, StatsResponse,
+    ByMonthResponse, ByDayResponse,
+    PieMonthResponse, PieDayFiledResponse,
+    SearchResponse, ImportRunsResponse,
+)
 from services.cases import (
     process_import, get_stats,
     get_charts_by_month, get_charts_by_day,
@@ -268,7 +274,7 @@ def logout():
 
 # ── Health ────────────────────────────────────────────────────────────────────
 
-@router.api_route("/health", methods=["GET", "HEAD"])
+@router.api_route("/health", methods=["GET", "HEAD"], response_model=HealthResponse)
 def health():
     try:
         conn = get_conn()
@@ -280,7 +286,7 @@ def health():
 
 # ── Import ────────────────────────────────────────────────────────────────────
 
-@router.post("/import-json")
+@router.post("/import-json", response_model=ImportResult)
 async def import_json(file: UploadFile = File(...)):
     content  = await file.read()
     filename = file.filename or "upload.json"
@@ -303,7 +309,7 @@ async def import_json(file: UploadFile = File(...)):
 
 # ── Dashboard API ─────────────────────────────────────────────────────────────
 
-@router.get("/api/stats")
+@router.get("/api/stats", response_model=StatsResponse)
 def api_stats():
     try:
         conn = get_conn()
@@ -315,7 +321,7 @@ def api_stats():
         conn.close()
 
 
-@router.get("/api/charts/by-month")
+@router.get("/api/charts/by-month", response_model=ByMonthResponse)
 def api_by_month():
     try:
         conn = get_conn()
@@ -327,7 +333,7 @@ def api_by_month():
         conn.close()
 
 
-@router.get("/api/charts/by-day")
+@router.get("/api/charts/by-day", response_model=ByDayResponse)
 def api_by_day(month: str):
     try:
         conn = get_conn()
@@ -339,7 +345,7 @@ def api_by_day(month: str):
         conn.close()
 
 
-@router.get("/api/charts/pie-month")
+@router.get("/api/charts/pie-month", response_model=PieMonthResponse)
 def api_pie_month(month: str):
     try:
         conn = get_conn()
@@ -351,7 +357,7 @@ def api_pie_month(month: str):
         conn.close()
 
 
-@router.get("/api/charts/pie-day-filed")
+@router.get("/api/charts/pie-day-filed", response_model=PieDayFiledResponse)
 def api_pie_day_filed(date: str):
     try:
         conn = get_conn()
@@ -363,7 +369,7 @@ def api_pie_day_filed(date: str):
         conn.close()
 
 
-@router.get("/api/search")
+@router.get("/api/search", response_model=SearchResponse)
 def api_search(case_number: str = None, date: str = None):
     if not case_number and not date:
         raise HTTPException(status_code=400, detail="Provide case_number or date")
@@ -377,7 +383,7 @@ def api_search(case_number: str = None, date: str = None):
         conn.close()
 
 
-@router.get("/api/import-runs")
+@router.get("/api/import-runs", response_model=ImportRunsResponse)
 def api_import_runs():
     try:
         conn = get_conn()
