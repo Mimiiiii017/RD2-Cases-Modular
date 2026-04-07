@@ -10,7 +10,7 @@ app = FastAPI(title="Caseflow API — Architecture B (Modular)")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["URL_TO_FRONTEND"],
+    allow_origins=[os.getenv("FRONTEND_URL", "http://localhost:3000")],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
