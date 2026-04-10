@@ -12,7 +12,7 @@ from repositories.cases import (
 
 REQUIRED_KEYS = [
     "Case Number", "Service Center", "Case Type", "Case Status",
-    "Title", "Application Filed Date", "Last Received Date",
+    "Title", "Application Filed Date", "Last Updated Date",
 ]
 
 
