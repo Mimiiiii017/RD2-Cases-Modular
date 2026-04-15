@@ -39,7 +39,7 @@ def validate_and_clean(records: list[dict]) -> list[tuple]:
         if missing:
             raise ValueError(f"Missing keys: {missing}")
 
-        last_received = parse_dt(rec.get("Last Received Date"))
+        last_received = parse_dt(rec.get("Last Updated Date"))
         case_number   = str(rec.get("Case Number", "")).strip()
 
         if not case_number or last_received is None:

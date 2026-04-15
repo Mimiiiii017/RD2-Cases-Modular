@@ -5,3 +5,4 @@ psycopg2-binary==2.9.10
 python-dotenv==1.0.1
 itsdangerous==2.2.0
 starlette==0.37.2
+pytest==8.3.3
